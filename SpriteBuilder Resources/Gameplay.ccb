@@ -773,8 +773,8 @@
 				<string>Point</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>0.5</real>
+					<real>0.5</real>
 				</array>
 			</dict>
 			<dict>
@@ -800,11 +800,25 @@
 			<key>centeredOrigin</key>
 			<false/>
 			<key>ext</key>
+			<string>phone</string>
+			<key>height</key>
+			<integer>320</integer>
+			<key>name</key>
+			<string>Phone</string>
+			<key>scale</key>
+			<real>1</real>
+			<key>width</key>
+			<integer>480</integer>
+		</dict>
+		<dict>
+			<key>centeredOrigin</key>
+			<false/>
+			<key>ext</key>
 			<string>tablet phonehd</string>
 			<key>height</key>
 			<integer>320</integer>
 			<key>name</key>
-			<string>Fixed</string>
+			<string>Tablet</string>
 			<key>scale</key>
 			<real>2</real>
 			<key>width</key>
