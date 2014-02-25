@@ -24,6 +24,7 @@
  */
 
 #import "CCLayout.h"
+#import "CCNode_Private.h"
 
 @implementation CCLayout
 
@@ -43,22 +44,30 @@
 }
 
 - (void) layout
-{}
+{
+    _needsLayout = NO;
+}
 
-- (void) visit
+- (CGSize)contentSize
+{
+    if (_needsLayout) [self layout];
+    return super.contentSize;
+}
+
+- (void) visit:(CCRenderer *)renderer parentTransform:(const GLKMatrix4 *)parentTransform
 {
     if (_needsLayout)
     {
         [self layout];
-        _needsLayout = NO;
     }
     
-    [super visit];
+    [super visit:renderer parentTransform:parentTransform];
 }
 
 - (void) addChild:(CCNode *)node z:(NSInteger)z name:(NSString*)name
 {
     [super addChild:node z:z name:name];
+    [self sortAllChildren];
     [self layout];
 }
 

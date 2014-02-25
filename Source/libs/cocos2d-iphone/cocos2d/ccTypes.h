@@ -31,6 +31,7 @@
 */
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKMath.h>
 #import "ccMacros.h"
 
 #ifdef __CC_PLATFORM_IOS
@@ -171,11 +172,11 @@ static inline ccColor3B ccc3BFromccc4F(ccColor4F c)
  */
 static inline ccColor4F ccc4FInterpolated(ccColor4F start, ccColor4F end, float t)
 {
-	start.r = end.r + (start.r - end.r ) * t;
-	start.g = end.g	+ (start.g - end.g ) * t;
-	start.b = end.b + (start.b - end.b ) * t;
-	start.a = end.a	+ (start.a - end.a ) * t;
-	return  start;
+	end.r = start.r + (end.r - start.r ) * t;
+	end.g = start.g	+ (end.g - start.g ) * t;
+	end.b = start.b + (end.b - start.b ) * t;
+	end.a = start.a	+ (end.a - start.a ) * t;
+	return  end;
 }
 
 /** A vertex composed of 2 GLfloats: x, y
@@ -467,16 +468,14 @@ static inline CCSizeType CCSizeTypeMake(CCSizeUnit widthUnit, CCSizeUnit heightU
     return cst;
 }
 
-#define CCPositionTypePoints CCPositionTypeMake(CCPositionUnitPoints, CCPositionUnitPoints, CCPositionReferenceCornerBottomLeft)
-
-#define CCPositionTypeUIPoints CCPositionTypeMake(CCPositionUnitUIPoints, CCPositionUnitUIPoints, CCPositionReferenceCornerBottomLeft)
-
-#define CCPositionTypeNormalized CCPositionTypeMake(CCPositionUnitNormalized, CCPositionUnitNormalized, CCPositionReferenceCornerBottomLeft)
+static const CCPositionType CCPositionTypePoints = {CCPositionUnitPoints, CCPositionUnitPoints, CCPositionReferenceCornerBottomLeft};
+static const CCPositionType CCPositionTypeUIPoints = {CCPositionUnitUIPoints, CCPositionUnitUIPoints, CCPositionReferenceCornerBottomLeft};
+static const CCPositionType CCPositionTypeNormalized = {CCPositionUnitNormalized, CCPositionUnitNormalized, CCPositionReferenceCornerBottomLeft};
 
 
-#define CCSizeTypePoints CCSizeTypeMake(CCSizeUnitPoints, CCSizeUnitPoints)
-#define CCSizeTypeUIPoints CCSizeTypeMake(CCSizeUnitUIPoints, CCSizeUnitUIPoints)
-#define CCSizeTypeNormalized CCSizeTypeMake(CCSizeUnitNormalized, CCSizeUnitNormalized)
+static const CCSizeType CCSizeTypePoints = {CCSizeUnitPoints, CCSizeUnitPoints};
+static const CCSizeType CCSizeTypeUIPoints = {CCSizeUnitUIPoints, CCSizeUnitUIPoints};
+static const CCSizeType CCSizeTypeNormalized = {CCSizeUnitNormalized, CCSizeUnitNormalized};
 
 typedef NS_ENUM(char, CCScaleType) {
     CCScaleTypePoints,

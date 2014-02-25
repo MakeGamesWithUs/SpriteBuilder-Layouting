@@ -32,8 +32,7 @@
 #import "CCDirector_Private.h"
 #import "CCScheduler.h"
 
-#import "kazmath/kazmath.h"
-#import "kazmath/GL/matrix.h"
+#import "OALSimpleAudio.h"
 
 NSString* const CCSetupPixelFormat = @"CCSetupPixelFormat";
 NSString* const CCSetupScreenMode = @"CCSetupScreenMode";
@@ -43,8 +42,14 @@ NSString* const CCSetupFixedUpdateInterval = @"CCSetupFixedUpdateInterval";
 NSString* const CCSetupShowDebugStats = @"CCSetupShowDebugStats";
 NSString* const CCSetupTabletScale2X = @"CCSetupTabletScale2X";
 
+NSString* const CCSetupDepthFormat = @"CCSetupDepthFormat";
+NSString* const CCSetupPreserveBackbuffer = @"CCSetupPreserveBackbuffer";
+NSString* const CCSetupMultiSampling = @"CCSetupMultiSampling";
+NSString* const CCSetupNumberOfSamples = @"CCSetupNumberOfSamples";
+
 NSString* const CCScreenOrientationLandscape = @"CCScreenOrientationLandscape";
 NSString* const CCScreenOrientationPortrait = @"CCScreenOrientationPortrait";
+NSString* const CCScreenOrientationAll = @"CCScreenOrientationAll";
 
 NSString* const CCScreenModeFlexible = @"CCScreenModeFlexible";
 NSString* const CCScreenModeFixed = @"CCScreenModeFixed";
@@ -71,13 +76,17 @@ const CGSize FIXED_SIZE = {568, 384};
 // Only valid for iOS 6+. NOT VALID for iOS 4 / 5.
 -(NSUInteger)supportedInterfaceOrientations
 {
-    if ([_screenOrientation isEqual:CCScreenOrientationLandscape])
+    if ([_screenOrientation isEqual:CCScreenOrientationAll])
     {
-        return UIInterfaceOrientationMaskLandscape;
+        return UIInterfaceOrientationMaskAll;
+    }
+    else if ([_screenOrientation isEqual:CCScreenOrientationPortrait])
+    {
+        return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
     }
     else
     {
-        return UIInterfaceOrientationMaskPortrait;
+        return UIInterfaceOrientationMaskLandscape;
     }
 }
 
@@ -85,18 +94,22 @@ const CGSize FIXED_SIZE = {568, 384};
 // Only valid on iOS 4 / 5. NOT VALID for iOS 6.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if ([_screenOrientation isEqual:CCScreenOrientationLandscape])
+    if ([_screenOrientation isEqual:CCScreenOrientationAll])
     {
-        return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+        return YES;
+    }
+    else if ([_screenOrientation isEqual:CCScreenOrientationPortrait])
+    {
+        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
     }
     else
     {
-        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+        return UIInterfaceOrientationIsLandscape(interfaceOrientation);
     }
 }
 
 // Projection delegate is only used if the fixed resolution mode is enabled
--(void)updateProjection
+-(GLKMatrix4)updateProjection
 {
 	CGSize sizePoint = [CCDirector sharedDirector].viewSize;
 	CGSize fixed = [CCDirector sharedDirector].designSize;
@@ -104,15 +117,7 @@ const CGSize FIXED_SIZE = {568, 384};
 	// Half of the extra size that will be cut off
 	CGPoint offset = ccpMult(ccp(fixed.width - sizePoint.width, fixed.height - sizePoint.height), 0.5);
 	
-	kmGLMatrixMode(KM_GL_PROJECTION);
-	kmGLLoadIdentity();
-	
-	kmMat4 orthoMatrix;
-	kmMat4OrthographicProjection(&orthoMatrix, offset.x, sizePoint.width + offset.x, offset.y, sizePoint.height + offset.y, -1024, 1024 );
-	kmGLMultMatrix( &orthoMatrix );
-	
-	kmGLMatrixMode(KM_GL_MODELVIEW);
-	kmGLLoadIdentity();
+	return GLKMatrix4MakeOrtho(offset.x, sizePoint.width + offset.x, offset.y, sizePoint.height + offset.y, -1024, 1024);
 }
 
 // This is needed for iOS4 and iOS5 in order to ensure
@@ -175,11 +180,11 @@ FindPOTScale(CGFloat size, CGFloat fixedSize)
 	CCGLView *glView = [CCGLView
 		viewWithFrame:[window_ bounds]
 		pixelFormat:config[CCSetupPixelFormat] ?: kEAGLColorFormatRGBA8
-		depthFormat:0
-		preserveBackbuffer:NO
+        depthFormat:[config[CCSetupDepthFormat] unsignedIntValue]
+		preserveBackbuffer:[config[CCSetupPreserveBackbuffer] boolValue]
 		sharegroup:nil
-		multiSampling:NO
-		numberOfSamples:0
+		multiSampling:[config[CCSetupMultiSampling] boolValue]
+		numberOfSamples:[config[CCSetupNumberOfSamples] unsignedIntValue]
 	];
 	
 	CCDirectorIOS* director = (CCDirectorIOS*) [CCDirector sharedDirector];
@@ -242,6 +247,9 @@ FindPOTScale(CGFloat size, CGFloat fixedSize)
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565
 	// You can change this setting at any time.
 	[CCTexture setDefaultAlphaPixelFormat:CCTexturePixelFormat_RGBA8888];
+    
+    // Initialise OpenAL
+    [OALSimpleAudio sharedInstance];
 	
 	// Create a Navigation Controller with the Director
 	navController_ = [[CCNavigationController alloc] initWithRootViewController:director];
