@@ -5,7 +5,7 @@
 	<key>defaultOrientation</key>
 	<integer>0</integer>
 	<key>designTarget</key>
-	<integer>1</integer>
+	<integer>0</integer>
 	<key>deviceOrientationLandscapeLeft</key>
 	<true/>
 	<key>deviceOrientationLandscapeRight</key>
@@ -89,25 +89,60 @@
 			<true/>
 		</dict>
 		<key>LayoutArtPack/background.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
+		<key>LayoutArtPack/background_large.png</key>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/bear.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/flyingpenguin.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/ground.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/longblock.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/seal.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/squareblock.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/tallblock.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/taperedblock.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>LayoutArtPack/waitingpenguin.png</key>
-		<dict/>
+		<dict>
+			<key>tabletScale</key>
+			<integer>1</integer>
+		</dict>
 		<key>Sprites</key>
 		<dict/>
 		<key>ccbResources</key>
